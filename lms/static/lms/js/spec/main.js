@@ -92,6 +92,7 @@
 
             // Discussion classes loaded explicitly until they are converted to use RequireJS
             'DiscussionModuleView': 'xmodule_js/common_static/common/js/discussion/discussion_module_view',
+            'DiscussionUserProfileView': 'xmodule_js/common_static/common/js/discussion/views/discussion_user_profile_view', // jshint ignore:line
 
             'js/bookmarks/collections/bookmarks': 'js/bookmarks/collections/bookmarks',
             'js/bookmarks/models/bookmark': 'js/bookmarks/models/bookmark',
@@ -394,7 +395,7 @@
                         'underscore.string',
                         'edx-ui-toolkit/js/utils/html-utils',
                         'edx-ui-toolkit/js/utils/string-utils'
-                    ], function (_, str, HtmlUtils, StringUtils) {
+                    ], function(_, str, HtmlUtils, StringUtils) {
                         window._ = _;
                         window._.str = str;
                         window.edx = edx || {};
@@ -608,7 +609,7 @@
                 ],
                 exports: 'DiscussionTopicMenuView'
             },
-            'xmodule_js/common_static/common/js/discussion/views/discussion_user_profile_view': {
+            'DiscussionUserProfileView': {
                 deps: [
                     'xmodule_js/common_static/common/js/discussion/utils'
                 ],
@@ -657,7 +658,6 @@
                     'xmodule_js/common_static/common/js/discussion/views/discussion_thread_show_view',
                     'xmodule_js/common_static/common/js/discussion/views/discussion_thread_view',
                     'xmodule_js/common_static/common/js/discussion/views/discussion_topic_menu_view',
-                    'xmodule_js/common_static/common/js/discussion/views/discussion_user_profile_view',
                     'xmodule_js/common_static/common/js/discussion/views/new_post_view',
                     'xmodule_js/common_static/common/js/discussion/views/thread_response_edit_view',
                     'xmodule_js/common_static/common/js/discussion/views/thread_response_show_view',
