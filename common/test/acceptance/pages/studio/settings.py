@@ -9,7 +9,7 @@ from bok_choy.javascript import requirejs
 
 from .course_page import CoursePage
 from .users import wait_for_ajax_or_reload
-from .utils import press_the_notification_button
+from .utils import press_the_notification_button, type_in_codemirror
 
 
 @requirejs('js/factories/settings')
@@ -28,7 +28,9 @@ class SettingsPage(CoursePage):
     ################
     def is_browser_on_page(self):
         wait_for_ajax_or_reload(self.browser)
-        return self.q(css='body.view-settings').visible
+        return all([
+            self.q(css='body.view-settings').visible,
+            self.q(css='#course-organization')[0].get_attribute('value') != ''])
 
     def wait_for_require_js(self):
         """
@@ -69,6 +71,37 @@ class SettingsPage(CoursePage):
     def get_element(self, css_selector):
         results = self.get_elements(css_selector=css_selector)
         return results[0] if results else None
+
+    def set_value(self, dates_dictionary):
+        """
+        Sets value inside the input fields
+        Input fields are the keys of dictionary
+        passed.
+        """
+        for css, value in dates_dictionary.iteritems():
+            element = self.get_element(css)
+            element.clear()
+            element.send_keys(value)
+
+    def un_focus_input_field(self):
+        """
+        Makes an input field un-focus by
+        clicking outside of it.
+        """
+        self.get_element('.title-2').click()
+
+    def element_presence(self, css_selector):
+        """
+        Returns boolean based on the presence
+        of an element with css as passed.
+        """
+        return self.q(css=css_selector).present
+
+    def change_course_description(self, change_text):
+        """
+        Changes the course description
+        """
+        type_in_codemirror(self, 0, change_text, find_prefix="$")
 
     ################
     # Properties
@@ -207,6 +240,17 @@ class SettingsPage(CoursePage):
     ################
     # Clicks
     ################
+
+    def click_button(self, name):
+        """
+        Clicks the button
+        """
+        btn_css = 'div#page-notification button.action-%s' % name.lower()
+        EmptyPromise(
+            lambda: self.q(css=btn_css).visible,
+            '{} button is visible'.format(name)
+        ).fulfill()
+        press_the_notification_button(self, name)
 
     ################
     # Workflows
