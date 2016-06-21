@@ -48,8 +48,8 @@ from xmodule.modulestore.mongo.base import MongoRevisionKey
 from xmodule.modulestore import ModuleStoreEnum
 from xmodule.modulestore.store_utilities import draft_node_constructor, get_draft_subtree_roots
 from xmodule.modulestore.tests.utils import LocationMixin
+from xmodule.library_tools import LibraryToolsService
 from xmodule.util.misc import escape_invalid_characters
-
 
 log = logging.getLogger(__name__)
 
@@ -739,10 +739,17 @@ def _update_and_import_module(
     fields = _update_module_references(module, source_course_id, dest_course_id)
     asides = module.get_asides() if isinstance(module, XModuleMixin) else None
 
-    return store.import_xblock(
+    imported_xblock = store.import_xblock(
         user_id, dest_course_id, module.location.category,
         module.location.block_id, fields, runtime, asides=asides
     )
+
+    if imported_xblock.location.block_type == 'library_content':
+        # Update imported xblocks' 'source_library_version' to keep it up to date.
+        tools = LibraryToolsService(store)
+        tools.update_children(imported_xblock, user_id)
+
+    return imported_xblock
 
 
 def _import_course_draft(
