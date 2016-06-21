@@ -3,6 +3,7 @@
     define(['backbone',
             'underscore',
             'jquery',
+            'edx-ui-toolkit/js/utils/constants',
             'text!common/templates/components/tabbed_view.underscore',
             'text!common/templates/components/tab.underscore',
             'text!common/templates/components/tabpanel.underscore',
@@ -10,20 +11,11 @@
                Backbone,
                _,
                $,
+               Constants,
                tabbedViewTemplate,
                tabTemplate,
                tabPanelTemplate
            ) {
-                var keys = {
-                    'left':     37,
-                    'right':    39,
-                    'down':     40,
-                    'up':       38,
-                    'enter':    13,
-                    'space':    32,
-                    'shift':    16,
-                    'tab':      9
-                };
                
                var getTabPanelId = function (id) {
                    return 'tabpanel-' + id;
@@ -161,14 +153,8 @@
                        this.setActiveTab($(event.currentTarget).data('index'));
                    },
                    
-                   previousTab: function(focused, index, total, event) {
-                       event.preventDefault();
-
+                   previousTab: function(focused, index) {
                         var tab, panel;
-
-                        if (event.altKey || event.shiftKey) {
-                            return true;
-                        }
 
                         if (index === 0) {
                             tab = $(focused).parent().find('.tab').last();                            
@@ -183,14 +169,8 @@
                         return false;
                    },
                    
-                   nextTab: function(focused, index, total, event) {
-                       event.preventDefault();
-
+                   nextTab: function(focused, index, total) {
                        var tab, panel;
-
-                       if (event.altKey || event.shiftKey) {
-                           return true;
-                       }
 
                        if (index === total) {
                            tab = $(focused).parent().find('.tab').first();                           
@@ -213,18 +193,20 @@
                             tab = $(focused).data('index');
                         
                         switch (key) {
-                            case keys.left:
-                            case keys.up:
-                                this.previousTab(focused, index, total, event);
+                            case Constants.keyCodes.left:
+                            case Constants.keyCodes.up:
+                                event.preventDefault();
+                                this.previousTab(focused, index);
                                 break;
                                 
-                            case keys.right:
-                            case keys.down:
-                                this.nextTab(focused, index, total, event);
+                            case Constants.keyCodes.right:
+                            case Constants.keyCodes.down:
+                                event.preventDefault();
+                                this.nextTab(focused, index, total);
                                 break;
                                 
-                            case keys.enter:
-                            case keys.space:
+                            case Constants.keyCodes.enter:
+                            case Constants.keyCodes.space:
                                 this.setActiveTab(tab);
                                 break;
                                 

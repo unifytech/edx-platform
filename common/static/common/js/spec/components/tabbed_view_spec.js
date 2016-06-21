@@ -4,19 +4,13 @@
     define(['jquery',
             'underscore',
             'backbone',
-            'common/js/components/views/tabbed_view'
+            'common/js/components/views/tabbed_view',
+            'jquery.simulate'
            ],
            function($, _, Backbone, TabbedView) {
-               var keys = {
-                       'UP': 38,
-                       'DOWN': 40,
-                       'LEFT': 37,
-                       'RIGHT': 39
-                   },
-                   keyPressEvent = function(key) {
-                       return $.Event('keydown', { keyCode: key });
-                   },
-                   view,
+               var keys = $.simulate.keyCode;
+               
+               var view,
                    TestSubview = Backbone.View.extend({
                        initialize: function (options) {
                            this.text = options.text;
@@ -97,8 +91,8 @@
                    it('works with keyboard navigation RIGHT and ENTER', function() {
                        view.$('.nav-item[data-index=0]').focus();
                        view.$('.nav-item[data-index=0]')
-                        .trigger(keyPressEvent(keys.RIGHT))
-                        .trigger(keyPressEvent(keys.ENTER));
+                        .simulate("keydown", { keyCode: keys.RIGHT })
+                        .simulate("keydown", { keyCode: keys.ENTER });
                        
                        expect(view.$('.nav-item[data-index=0]')).toHaveAttr({
                            'aria-expanded': 'false',
@@ -114,8 +108,9 @@
                    
                    it('works with keyboard navigation DOWN and wraps and ENTER', function() {
                        view.$('.nav-item[data-index=1]').focus();
-                       view.$('.nav-item[data-index=1]').trigger(keyPressEvent(keys.DOWN));
-                       view.$('.nav-item[data-index=1]').trigger(keyPressEvent(keys.ENTER));
+                       view.$('.nav-item[data-index=1]')
+                        .simulate("keydown", { keyCode: keys.DOWN })
+                        .simulate("keydown", { keyCode: keys.ENTER });
                        
                        expect(view.$('.nav-item[data-index=1]')).toHaveAttr({
                            'aria-expanded': 'false',
@@ -131,8 +126,9 @@
                    
                    it('works with keyboard navigation LEFT and ENTER', function() {
                        view.$('.nav-item[data-index=1]').focus();
-                       view.$('.nav-item[data-index=1]').trigger(keyPressEvent(keys.LEFT));
-                       view.$('.nav-item[data-index=1]').trigger(keyPressEvent(keys.ENTER));
+                       view.$('.nav-item[data-index=1]')
+                        .simulate("keydown", { keyCode: keys.LEFT })
+                        .simulate("keydown", { keyCode: keys.ENTER });
                        
                        expect(view.$('.nav-item[data-index=1]')).toHaveAttr({
                            'aria-expanded': 'false',
@@ -148,8 +144,9 @@
                    
                    it('works with keyboard navigation UP and wraps and ENTER', function() {
                        view.$('.nav-item[data-index=0]').focus();
-                       view.$('.nav-item[data-index=0]').trigger(keyPressEvent(keys.UP));
-                       view.$('.nav-item[data-index=0]').trigger(keyPressEvent(keys.ENTER));
+                       view.$('.nav-item[data-index=0]')
+                        .simulate("keydown", { keyCode: keys.UP })
+                        .simulate("keydown", { keyCode: keys.ENTER });
                        
                        expect(view.$('.nav-item[data-index=0]')).toHaveAttr({
                            'aria-expanded': 'false',
