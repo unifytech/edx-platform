@@ -1,6 +1,7 @@
 """Unit tests for the Paver asset tasks."""
 
 import ddt
+from pavelib.assets import collect_assets
 from paver.easy import call_task
 from mock import patch
 from watchdog.observers.polling import PollingObserver
@@ -58,3 +59,14 @@ class TestPaverAssetTasks(PaverTestCase):
                 expected_messages.append("rm -rf cms/static/css/*.css")
             expected_messages.append("libsass cms/static/sass")
         self.assertEquals(self.task_messages, expected_messages)
+
+class test_collect_assets(PaverTestCase):
+    """
+    Test the collectstatic process call
+    """
+    def setUp(self):
+        pass
+
+    def test_collect_assets_debug(self):
+        debug_tuple = {"debug": False, "collect_log": None}
+        # TODO
