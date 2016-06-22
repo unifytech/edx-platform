@@ -109,10 +109,10 @@
             },
             
             setActiveTab: function(index) {
-                var $tabMeta = this.getTabMeta(index),
-                    $tab = $tabMeta.tab,
-                    $tabEl = $tabMeta.element,
-                    $view = $tab.view;
+                var tabMeta = this.getTabMeta(index),
+                    tab = tabMeta.tab,
+                    view = tab.view,
+                    $tabEl = tabMeta.element;
                 
                 // Hide old tab/tabpanel
                 this.$('button.is-active')
@@ -131,7 +131,7 @@
                 
                 // Show new tab/tabpanel
                 if (this.router) {
-                    this.router.navigate($tab.url, { replace: true });
+                    this.router.navigate(tab.url, { replace: true });
                 }
                 
                 $tabEl
@@ -142,13 +142,11 @@
                         'tabindex': '0'
                     });
                 
-                $view.$el
+                view.$el
                     .removeClass('is-hidden')
                     .attr({
                         'aria-hidden': 'false',
-                    })
-                    .find('.sr-is-focusable')
-                        .focus();
+                    });
             },
             
             switchTab: function(event) {
@@ -157,55 +155,55 @@
             },
             
             previousTab: function(focused, index) {
-                var tab, panel;
+                var $tab, $panel;
                 
                 if (index === 0) {
-                    tab = $(focused).parent().find('.tab').last();                            
+                    $tab = $(focused).parent().find('.tab').last();                            
                 } else {
-                    tab = $(focused).parent().find('.tab:eq(' + index + ')').prev();
+                    $tab = $(focused).parent().find('.tab:eq(' + index + ')').prev();
                 }
                 
-                panel = $(tab).data('index');
+                $panel = $($tab).data('index');
                 
-                tab.focus();
+                $tab.focus();
                 
                 return false;
             },
             
             nextTab: function(focused, index, total) {
-                var tab, panel;
+                var $tab, $panel;
                 
                 if (index === total) {
-                    tab = $(focused).parent().find('.tab').first();                           
+                    $tab = $(focused).parent().find('.tab').first();                           
                 } else {
-                    tab = $(focused).parent().find('.tab:eq(' + index + ')').next();
+                    $tab = $(focused).parent().find('.tab:eq(' + index + ')').next();
                 }
                 
-                panel = $(tab).data('index');
+                $panel = $($tab).data('index');
                 
-                tab.focus();
+                $tab.focus();
                 
                 return false;
             },
             
             keydownHandler: function(event) {
                 var key = event.which,
-                    $focused = $(event.currentTarget),
-                    $index = $($focused).parent().find('.tab').index($focused),
-                    $total = $($focused).parent().find('.tab').size() - 1,
-                    $tab = $($focused).data('index');
+                    focused = $(event.currentTarget),
+                    index = $(focused).parent().find('.tab').index(focused),
+                    total = $(focused).parent().find('.tab').size() - 1,
+                    $tab = $(focused).data('index');
                 
                 switch (key) {
                     case Constants.keyCodes.left:
                     case Constants.keyCodes.up:
                         event.preventDefault();
-                        this.previousTab($focused, $index);
+                        this.previousTab(focused, index);
                         break;
                     
                     case Constants.keyCodes.right:
                     case Constants.keyCodes.down:
                         event.preventDefault();
-                        this.nextTab($focused, $index, $total);
+                        this.nextTab(focused, index, total);
                         break;
                     
                     case Constants.keyCodes.enter:
@@ -223,15 +221,16 @@
             * encapsulating the tab object and its element.
             */
             getTabMeta: function (tabNameOrIndex) {
-                var tab, element;
+                var tab, $element;
+
                 if (typeof tabNameOrIndex === 'string') {
                     tab = this.urlMap[tabNameOrIndex];
-                    element = this.$('button[data-url='+tabNameOrIndex+']');
+                    $element = this.$('button[data-url='+tabNameOrIndex+']');
                 }  else {
                     tab = this.tabs[tabNameOrIndex];
-                    element = this.$('button[data-index='+tabNameOrIndex+']');
+                    $element = this.$('button[data-index='+tabNameOrIndex+']');
                 }
-                return {'tab': tab, 'element': element};
+                return {'tab': tab, 'element': $element};
             }
         });
         return TabbedView;
