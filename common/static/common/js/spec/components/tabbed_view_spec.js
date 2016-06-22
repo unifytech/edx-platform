@@ -45,7 +45,7 @@
                    });
 
                    it('can render itself', function () {
-                       expect(view.$el.html()).toContain('<nav class="page-content-nav"');
+                       expect(view.$el.html()).toContain('<div class="page-content-nav"');
                    });
 
                    it('shows its first tab by default', function () {
