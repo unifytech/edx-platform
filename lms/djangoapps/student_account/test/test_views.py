@@ -26,7 +26,6 @@ from openedx.core.djangoapps.programs.tests.mixins import ProgramsApiConfigMixin
 from nose.plugins.attrib import attr
 
 from course_modes.models import CourseMode
-from openedx.core.djangoapps.theming.test_util import with_edx_domain_context
 from openedx.core.djangoapps.user_api.accounts.api import activate_account, create_account
 from openedx.core.djangoapps.user_api.accounts import EMAIL_MAX_LENGTH
 from openedx.core.djangolib.js_utils import dump_js_escaped_json
