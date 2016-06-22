@@ -147,7 +147,8 @@
                     .attr({
                         'aria-hidden': 'false',
                     })
-                    .focus();
+                    .find('.sr-is-focusable')
+                        .focus();
             },
             
             switchTab: function(event) {
