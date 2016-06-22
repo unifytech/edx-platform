@@ -5,14 +5,12 @@
 define(
 'video/05_video_quality_control.js',
 [],
-function () {
+function (HtmlUtils) {
     var template = [
         '<button class="control quality-control is-hidden" aria-disabled="false" title="',
             gettext('High Definition'),
         '">',
             '<span class="icon icon-hd" aria-hidden="true">HD</span>', // "HD" is treated as a proper noun
-            // Translator note:
-            // HD stands for high definition
             '<span class="sr text-translation">',
                 gettext('High Definition'),
             '</span>&nbsp;',
@@ -81,7 +79,7 @@ function () {
     function _renderElements(state) {
         var element = state.videoQualityControl.el = $(template);
         state.videoQualityControl.quality = 'large';
-        state.el.find('.secondary-controls').append(element);
+        HtmlUtils.append(state.el.find('.secondary-controls'), element);
     }
 
     // function _bindHandlers(state)
