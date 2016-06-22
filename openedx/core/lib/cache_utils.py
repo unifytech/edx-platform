@@ -1,6 +1,7 @@
 """
 Utilities related to caching.
 """
+import collections
 import cPickle as pickle
 import functools
 import zlib
