@@ -2080,6 +2080,8 @@ INSTALLED_APPS = (
 
     # Email marketing integration
     'email_marketing',
+
+    'django_extensions',
 )
 
 # Migrations which are not in the standard module "migrations"
