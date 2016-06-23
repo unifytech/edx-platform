@@ -395,8 +395,7 @@ def validate_user_preference_serializer(serializer, preference_key, preference_v
             }
         })
     if preference_key == "time_zone" and preference_value not in common_timezones_set:
-        developer_message = ugettext_noop(u"Value '{preference_value}' not valid for preference '{preference_key}': "
-                                          u"Not in timezone set.")
+        developer_message = ugettext_noop(u"Value '{preference_value}' not valid for preference '{preference_key}': Not in timezone set.")  # pylint: disable=line-too-long
         user_message = ugettext_noop(u"Value '{preference_value}' is not valid for user preference '{preference_key}'.")
         raise PreferenceValidationError({
             preference_key: {

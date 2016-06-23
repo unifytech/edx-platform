@@ -31,6 +31,7 @@ from openedx.core.djangoapps.programs.models import ProgramsApiConfig
 from openedx.core.djangoapps.theming.helpers import is_request_in_themed_site, get_value as get_themed_value
 from openedx.core.djangoapps.user_api.accounts.api import request_password_change
 from openedx.core.djangoapps.user_api.errors import UserNotFound
+from openedx.core.djangoapps.user_api.models import UserPreference
 from openedx.core.lib.edx_api_utils import get_edx_api_data
 from student.models import UserProfile
 from student.views import (
@@ -42,12 +43,7 @@ import third_party_auth
 from third_party_auth import pipeline
 from third_party_auth.decorators import xframe_allow_whitelisted
 from util.bad_request_rate_limiter import BadRequestRateLimiter
-from openedx.core.djangoapps.theming.helpers import is_request_in_themed_site, get_value as get_themed_value
-from openedx.core.djangoapps.user_api.accounts.api import request_password_change
-from openedx.core.djangoapps.user_api.errors import UserNotFound
 from util.date_utils import strftime_localized
-
-from openedx.core.djangoapps.user_api.models import UserPreference
 
 AUDIT_LOG = logging.getLogger("audit")
 log = logging.getLogger(__name__)

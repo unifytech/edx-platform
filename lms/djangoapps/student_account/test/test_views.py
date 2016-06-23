@@ -18,24 +18,23 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.http import HttpRequest
 from edx_rest_api_client import exceptions
+from nose.plugins.attrib import attr
 
 from commerce.models import CommerceConfiguration
 from commerce.tests import TEST_API_URL, TEST_API_SIGNING_KEY, factories
 from commerce.tests.mocks import mock_get_orders
-from openedx.core.djangoapps.programs.tests.mixins import ProgramsApiConfigMixin
-from nose.plugins.attrib import attr
-
 from course_modes.models import CourseMode
+from openedx.core.djangoapps.programs.tests.mixins import ProgramsApiConfigMixin
 from openedx.core.djangoapps.user_api.accounts.api import activate_account, create_account
 from openedx.core.djangoapps.user_api.accounts import EMAIL_MAX_LENGTH
 from openedx.core.djangolib.js_utils import dump_js_escaped_json
 from openedx.core.djangolib.testing.utils import CacheIsolationTestCase
+from openedx.core.djangoapps.theming.tests.test_util import with_edx_domain_context
 from student.tests.factories import UserFactory
 from student_account.views import account_settings_context, get_user_orders
 from third_party_auth.tests.testutil import simulate_running_pipeline, ThirdPartyAuthTestMixin
 from util.testing import UrlResetMixin
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
-from openedx.core.djangoapps.theming.tests.test_util import with_edx_domain_context
 
 
 @ddt.ddt

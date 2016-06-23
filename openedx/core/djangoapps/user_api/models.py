@@ -31,7 +31,7 @@ class UserPreference(models.Model):
     value = models.TextField()
 
     TIME_ZONE_CHOICES = [
-        [tz, get_formatted_time_zone(tz)] for tz in common_timezones
+        (tz, get_formatted_time_zone(tz)) for tz in common_timezones
     ]
 
     class Meta(object):
