@@ -1,9 +1,9 @@
-(function(define) {
+(function (define) {
 'use strict';
 // VideoVolumeControl module.
 define(
-'video/07_video_volume_control.js', [],
-function(HtmlUtils) {
+'video/07_video_volume_control.js', ['edx-ui-toolkit/js/utils/html-utils'],
+function (HtmlUtils) {
     /**
      * Video volume control module.
      * @exports video/07_video_volume_control.js
@@ -37,32 +37,40 @@ function(HtmlUtils) {
         /** Step to increase/decrease volume level via keyboard. */
         step: 20,
 
-        template: HtmlUtils.joinHtml(
-            HtmlUtils.HTML('<div class="volume" role="application">'),
-                HtmlUtils.HTML('<p class="sr instructions" id="volume-instructions">'),
-                    gettext('Click on this button to mute or unmute this video or press UP or DOWN buttons to increase or decrease volume level.'), // jshint ignore: line
-                HtmlUtils.HTML('</p>'),
-                HtmlUtils.HTML('<button class="control" aria-disabled="false" aria-describedby="volume-instructions"'),
-                    HtmlUtils.HTML('" aria-expanded="false" title="'),
-                        gettext('Adjust video volume'),
-                    HtmlUtils.HTML('">'),
-                    HtmlUtils.HTML('<span class="icon fa fa-volume-up" aria-hidden="true"></span>'),
-                    HtmlUtils.HTML('<span class="sr control-text">'),
-                        gettext('Volume'),
-                    HtmlUtils.HTML('</span>'),
-                HtmlUtils.HTML('</button>'),
-                HtmlUtils.HTML('<div class="volume-slider-container" aria-hidden="true" title="'),
-                    gettext('Adjust video volume'),
-                    HtmlUtils.HTML('">'),
-                    HtmlUtils.HTML('<div class="volume-slider" '),
-                        HtmlUtils.HTML('role="slider"'),
-                        HtmlUtils.HTML('aria-orientation="vertical" '),
-                        HtmlUtils.HTML('aria-valuemin="0" '),
-                        HtmlUtils.HTML('aria-valuemax="100" '),
-                        HtmlUtils.HTML('aria-valuenow="" '),
-                        HtmlUtils.HTML('aria-label="' + gettext('Adjust video volume')  + '"></div>'),
-                HtmlUtils.HTML('</div>'),
-            HtmlUtils.HTML('</div>')
+        videoVolumeControlHtml: HtmlUtils.interpolateHtml(
+            HtmlUtils.HTML([
+            '<div class="volume" role="application">',
+                '<p class="sr instructions" id="volume-instructions">',
+                    '{volumeInstructions}',
+                '</p>',
+                '<button class="control" aria-disabled="false" aria-describedby="volume-instructions"',
+                    '" aria-expanded="false" title="',
+                        '{adjustVideoVolume}',
+                    '">',
+                    '<span class="icon fa fa-volume-up" aria-hidden="true"></span>',
+                    '<span class="sr control-text">',
+                        '{volumeText}',
+                    '</span>',
+                '</button>',
+                '<div class="volume-slider-container" aria-hidden="true" title="',
+                    '{adjustVideoVolume}',
+                    '">',
+                    '<div class="volume-slider" ',
+                        'role="slider"',
+                        'aria-orientation="vertical" ',
+                        'aria-valuemin="0" ',
+                        'aria-valuemax="100" ',
+                        'aria-valuenow="" ',
+                        'aria-label="',
+                        '{volumeText}',
+                        '"></div>',
+                '</div>',
+            '</div>'].join('')),
+            {
+                volumeInstructions: gettext('Click on this button to mute or unmute this video or press UP or DOWN buttons to increase or decrease volume level.'),
+                adjustVideoVolume: gettext('Adjust video volume'),
+                volumeText: gettext('Volume')
+            }
         ),
 
         destroy: function () {
@@ -101,7 +109,7 @@ function(HtmlUtils) {
                 return false;
             }
 
-            this.el = $(this.template);
+            this.el = $(this.videoVolumeControlHtml.toString());
             // Youtube iframe react on key buttons and has his own handlers.
             // So, we disallow focusing on iframe.
             this.state.el.find('iframe').attr('tabindex', -1);
@@ -125,8 +133,8 @@ function(HtmlUtils) {
          */
         render: function() {
             var container = this.el.find('.volume-slider');
-
-            HtmlUtils.append(container, '<div class="ui-slider-handle volume-handle"></div>');
+            
+            HtmlUtils.append(container, HtmlUtils.HTML('<div class="ui-slider-handle volume-handle"></div>'));
 
             this.volumeSlider = container.slider({
                 orientation: 'vertical',

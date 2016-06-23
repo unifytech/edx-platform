@@ -1,6 +1,6 @@
 (function (define) {
 'use strict';
-define('video/04_video_full_screen.js', [], function (HtmlUtils) {
+define('video/04_video_full_screen.js', ['edx-ui-toolkit/js/utils/html-utils'], function (HtmlUtils) {
     var template = [
         '<button class="control add-fullscreen" aria-disabled="false" title="',
             gettext('Fill browser'),
@@ -71,7 +71,7 @@ define('video/04_video_full_screen.js', [], function (HtmlUtils) {
         state.videoFullScreen.fullScreenEl = $(template);
         state.videoFullScreen.sliderEl = state.el.find('.slider');
         state.videoFullScreen.fullScreenState = false;
-        HtmlUtils.append(state.el.find('.secondary-controls'), state.videoFullScreen.fullScreenEl);
+        HtmlUtils.append(state.el.find('.secondary-controls'), HtmlUtils.HTML(state.videoFullScreen.fullScreenEl));
         state.videoFullScreen.updateControlsHeight();
     }
 
