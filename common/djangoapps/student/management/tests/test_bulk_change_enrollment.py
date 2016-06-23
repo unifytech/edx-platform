@@ -2,9 +2,10 @@
 import ddt
 from django.core.management import call_command
 from django.core.management.base import CommandError
+from mock import patch, call
 
 from student.tests.factories import UserFactory, CourseModeFactory, CourseEnrollmentFactory
-from student.models import CourseEnrollment
+from student.models import CourseEnrollment, EVENT_NAME_ENROLLMENT_MODE_CHANGED
 from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
 
@@ -15,8 +16,11 @@ class BulkChangeEnrollmentTests(SharedModuleStoreTestCase):
 
     def setUp(self):
         super(BulkChangeEnrollmentTests, self).setUp()
+        patcher = patch('student.models.tracker')
+        self.mock_tracker = patcher.start()
         self.course = CourseFactory.create()
         self.users = UserFactory.create_batch(5)
+        self.addCleanup(patcher.stop)
 
     @ddt.data(('audit', 'honor'), ('honor', 'audit'))
     @ddt.unpack
@@ -40,6 +44,16 @@ class BulkChangeEnrollmentTests(SharedModuleStoreTestCase):
         # raise CourseEnrollment.DoesNotExist
         for user in self.users:
             CourseEnrollment.objects.get(mode=to_mode, course_id=self.course.id, user=user)
+
+            # Confirm the analytics event was emitted.
+            self.mock_tracker.emit.assert_has_calls(  # pylint: disable=maybe-no-member
+                [
+                    call(
+                        EVENT_NAME_ENROLLMENT_MODE_CHANGED,
+                        {'course_id': unicode(self.course.id), 'user_id': user.id, 'mode': to_mode}
+                    ),
+                ]
+            )
 
     def test_without_commit(self):
         """Verify that nothing happens when the `commit` flag is not given."""
