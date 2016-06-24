@@ -83,6 +83,17 @@ footer#footer-edx-v3 {
       width: 100%;
     }
   }
+  
+  .social-media-links,
+  .mobile-app-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      
+      li {
+          display: inline-block;
+      }
+  }
 
   .mobile-app-links {
     @include clearfix();
