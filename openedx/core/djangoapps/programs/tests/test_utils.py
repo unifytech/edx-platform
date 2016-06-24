@@ -741,3 +741,22 @@ class TestSupplementProgramData(ProgramsApiConfigMixin, ModuleStoreTestCase):
         data = utils.supplement_program_data(self.program, self.user)
 
         self._assert_supplemented(data, is_enrollment_open=is_enrollment_open)
+
+    @mock.patch(UTILS_MODULE + '.get_organization_by_short_name')
+    def test_organizations_logo_exists(self, mock_get_organization_by_short_name):
+        """ Verify the logo image is set from the organizations api """
+        mock_logo_url = 'edx/logo.png'
+        mock_image = mock.Mock()
+        mock_image.url = mock_logo_url
+        mock_get_organization_by_short_name.return_value = {
+            'logo': mock_image
+        }
+        data = utils.supplement_program_data(self.program, self.user)
+        self.assertEqual(data['organizations'][0].get('img'), mock_logo_url)
+
+    @mock.patch(UTILS_MODULE + '.get_organization_by_short_name')
+    def test_get_non_exists_organization(self, mock_get_organization_by_short_name):
+        """ Verify the logo image is not set if the organizations api returns None """
+        mock_get_organization_by_short_name.return_value = None
+        data = utils.supplement_program_data(self.program, self.user)
+        self.assertEqual(data['organizations'][0].get('img'), None)
