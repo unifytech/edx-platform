@@ -60,6 +60,7 @@ class TestPaverAssetTasks(PaverTestCase):
             expected_messages.append("libsass cms/static/sass")
         self.assertEquals(self.task_messages, expected_messages)
 
+
 class test_collect_assets(PaverTestCase):
     """
     Test the collectstatic process call
@@ -68,5 +69,5 @@ class test_collect_assets(PaverTestCase):
         pass
 
     def test_collect_assets_debug(self):
-        debug_tuple = {"debug": False, "collect_log": None}
+        collect_assets("foo", "bar", debug=True)
         # TODO
